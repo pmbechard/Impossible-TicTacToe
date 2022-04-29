@@ -29,12 +29,13 @@ Player has options to:
 
 OBJECTS
 GameFlow - manages game progression
+GameOptions - manages settings
 GameGrid - tracks marker positions
 Player - manages player functionalities
 AI - manages bot player moves
 */
 
-const gameGrid = (() => {
+const GameGrid = (() => {
     let gameBoard = ['','','','','','','','',''];
     let markerCount = 0;
 
@@ -71,8 +72,8 @@ const gameGrid = (() => {
             showResult(0, 4, 8);
         } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
             showResult(2, 4, 6);
-        } else {
-            console.log('no winner');
+        } else if (gameBoard.every( value => (value) !== '')) {
+            console.log('draw');
         }
     };
 
@@ -88,6 +89,48 @@ const gameGrid = (() => {
         updateDisplay();
     }
 
-    return { addMarker, reset }
+    return { addMarker, reset };
 })();
+
+const GameOptions = (() => {
+    let playerMarker = 'X';
+    let botMarker = 'O';
+
+    const swapMarkers = () => {
+        if (playerMarker === 'X') {
+            playerMarker = 'O';
+            botMarker = 'X';
+        } else {
+            playerMarker = 'X';
+            botMarker = 'O';
+        }
+        GameGrid.reset();
+    };
+
+    const getDifficultySetting = () => difficulty.value;
+
+    const swapMarkersButton = document.querySelector('.switch');
+    swapMarkersButton.addEventListener('click', () => swapMarkers());
+
+    const difficulty = document.querySelector('#difficulty');
+
+    const restartButton = document.getElementById('restart');
+    restartButton.addEventListener('click', () => GameGrid.reset());
+
+    return { getDifficultySetting };
+})();
+
+const Player = (() => {
+    
+})();
+
+const AI = (() => {
+
+})();
+
+const GameFlow = (() => {
+
+})();
+
+
 
