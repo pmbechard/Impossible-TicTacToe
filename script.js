@@ -42,10 +42,17 @@ const GameGrid = (() => {
     let markerCount = 0;
     const getMarkerCount = () => markerCount;
 
-    const addMarker = (marker, value) => {
+    const addMarker = (value) => {
+        let marker = GameOptions.getPlayerMarker();
+        if (GameFlow.isPlayerTurn()) {
+            console.log('here')
+            marker = GameOptions.getPlayerMarker();
+        } else {
+            marker = GameOptions.getAIMarker();
+        }
         gameBoard[value] = marker;
         const slot = document.getElementById(`box-${value}`);
-        slot.setAttribute('disabled', 'true');
+        slot.classList.add('disabled');
         markerCount++;
         updateDisplay();
     };
@@ -59,7 +66,7 @@ const GameGrid = (() => {
 
     const reset = () => {
         const gameGrid = document.querySelectorAll('.game-grid div');
-        gameGrid.forEach( (slot) => slot.removeAttribute('disabled') );
+        gameGrid.forEach( (slot) => slot.classList.remove('disabled') );
         gameBoard.fill('');
         markerCount = 0;
         updateDisplay();
@@ -70,15 +77,18 @@ const GameGrid = (() => {
 
 const GameOptions = (() => {
     let playerMarker = 'X';
-    let botMarker = 'O';
+    let AIMarker = 'O';
+
+    const getPlayerMarker = () => playerMarker;
+    const getAIMarker = () => AIMarker;
 
     const swapMarkers = () => {
         if (playerMarker === 'X') {
             playerMarker = 'O';
-            botMarker = 'X';
+            AIMarker = 'X';
         } else {
             playerMarker = 'X';
-            botMarker = 'O';
+            AIMarker = 'O';
         }
         GameGrid.reset();
     };
@@ -93,47 +103,109 @@ const GameOptions = (() => {
     const restartButton = document.getElementById('restart');
     restartButton.addEventListener('click', () => GameGrid.reset());
 
-    return { getDifficultySetting };
+    return { getPlayerMarker, getAIMarker, getDifficultySetting };
 })();
 
 const Player = (() => {
-    
+    // Wait for player choice???
+    const gameGrid = document.querySelectorAll('.game-grid div');
+    let choice = null;
+    gameGrid.forEach( (slot) => {
+        slot.addEventListener('click', () => {
+            choice = slot.getAttribute('value');
+            makeMove();
+        });
+    });
+
+    const getUserChoice = () => { choice };
+
+    const makeMove = () => {
+        if (GameFlow.isPlayerTurn() && choice) {
+            GameGrid.addMarker(choice);
+            choice = null;
+            GameFlow.checkResult();
+            if (GameFlow.isGameOn) {
+                AI.makeMove();
+            }
+        }
+    };
+
+    return { getUserChoice };
 })();
 
 const AI = (() => {
+    const gameBoard = GameGrid.getGameBoard();
 
+    const makeMove = () => {
+        if (!GameFlow.isPlayerTurn()) {
+            let random = parseInt(Math.random() * 9);
+            while (gameBoard[random] !== '') {
+                random = parseInt(Math.random() * 9);
+            }
+            GameGrid.addMarker(random);
+        }
+        GameFlow.checkResult();
+    };
+    return { makeMove };
 })();
 
 const GameFlow = (() => {
+    // rungame
+    // player move
+    // check result
+    // bot move
+    // check result
+    // ...
+    // if result, game finished
+
     const gameBoard = GameGrid.getGameBoard();
-    const getMarkerCount = GameGrid.getMarkerCount();
+    const markerCount = GameGrid.getMarkerCount();
+    let playerTurn = true;
+    let gameOn = false;
+
+    const isPlayerTurn = () => playerTurn;
+    const isGameOn = () => gameOn;
+
 
     const checkResult = () => {
         if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
             showResult(0, 1, 2);
+            gameOn = false;
         } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
             showResult(3, 4, 5);
+            gameOn = false;
         } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
             showResult(6, 7, 8);
+            gameOn = false;
         } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
             showResult(0, 3, 6);
+            gameOn = false;
         } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
             showResult(1, 4, 7);
+            gameOn = false;
         } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
             showResult(2, 5, 8);
+            gameOn = false;
         } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
             showResult(0, 4, 8);
+            gameOn = false;
         } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
             showResult(2, 4, 6);
+            gameOn = false;
         } else if (markerCount === 9) {
             console.log('draw');
-        }
+            gameOn = false;
+        } 
+        playerTurn = !playerTurn;
     };
 
     const showResult = (a, b, c) => {
+            // highlight winning choices
+            // disable all slots
+            // show result message
+            // pulse restart button
             console.log(`${gameBoard[a]} wins`);
     };
+
+    return { isPlayerTurn, checkResult, isGameOn };
 })();
-
-
-

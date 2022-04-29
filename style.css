@@ -57,6 +57,10 @@ header {
     background-color: rgb(204, 204, 204, 0.2);
 }
 
+.game-grid div.disabled {
+    background-color: rgb(204, 204, 204, 0.4);
+}
+
 .reset-buttons {
     height: 10vh;
 
