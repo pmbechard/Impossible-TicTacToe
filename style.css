@@ -50,6 +50,11 @@ header {
 
 .game-grid div {
     border: 1px solid black;
+    cursor: pointer;
+}
+
+.game-grid div:hover {
+    background-color: rgb(204, 204, 204, 0.2);
 }
 
 .reset-buttons {
@@ -138,7 +143,7 @@ footer img:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: rgb(204, 204, 204);
     border-radius: 8px;
     -webkit-transition: .4s;
     transition: .4s;
@@ -161,11 +166,11 @@ footer img:hover {
 }
 
 input:checked + .slider {
-    background-color: rgba(150, 150, 150);
+    background-color: rgb(180, 180, 180);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px rgba(150, 150, 150);
+    box-shadow: 0 0 1px rgb(180, 180, 180);
 }
 
 input:checked + .slider:before {
