@@ -45,7 +45,6 @@ const GameGrid = (() => {
     const addMarker = (value) => {
         let marker = GameOptions.getPlayerMarker();
         if (GameFlow.isPlayerTurn()) {
-            console.log('here')
             marker = GameOptions.getPlayerMarker();
         } else {
             marker = GameOptions.getAIMarker();
@@ -107,7 +106,6 @@ const GameOptions = (() => {
 })();
 
 const Player = (() => {
-    // Wait for player choice???
     const gameGrid = document.querySelectorAll('.game-grid div');
     let choice = null;
     gameGrid.forEach( (slot) => {
@@ -120,11 +118,11 @@ const Player = (() => {
     const getUserChoice = () => { choice };
 
     const makeMove = () => {
-        if (GameFlow.isPlayerTurn() && choice) {
+        if (GameFlow.isPlayerTurn() && GameFlow.isGameOn() && choice) {
             GameGrid.addMarker(choice);
             choice = null;
             GameFlow.checkResult();
-            if (GameFlow.isGameOn) {
+            if (GameFlow.isGameOn()) {
                 AI.makeMove();
             }
         }
@@ -161,7 +159,7 @@ const GameFlow = (() => {
     const gameBoard = GameGrid.getGameBoard();
     const markerCount = GameGrid.getMarkerCount();
     let playerTurn = true;
-    let gameOn = false;
+    let gameOn = true;
 
     const isPlayerTurn = () => playerTurn;
     const isGameOn = () => gameOn;
