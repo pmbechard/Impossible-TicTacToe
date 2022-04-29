@@ -1,0 +1,186 @@
+/*              UNIVERSAL       */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*              HEADER          */
+header {
+    height: 15vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*              BODY            */
+.game-area {
+    height: 75vh;
+}
+
+.options-menu {
+    height: 10vh;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.game-grid {
+    height: 55vh;
+    width: 55vh;
+
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.game-grid div {
+    border: 1px solid black;
+}
+
+.reset-buttons {
+    height: 10vh;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.game-area button,
+.game-area select {
+    width: 45%;
+    padding: 10px 0;
+    margin: 0 2.5%;
+    font-size: 16px;
+}
+
+.game-area select {
+    border: none;
+    border-bottom: 3px solid rgb(128, 128, 128, 0.5);
+    text-align: center;
+}
+
+.game-area select:hover {
+    border-bottom: 3px solid rgb(128, 128, 128, 0.8);
+}
+
+.game-area select:focus {
+    outline: none;
+}
+
+
+/*              FOOTER          */
+footer {
+    height: 10vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer img {
+    height: 20px;
+    margin-left: 20px;
+    transition: 0.3s ease-in-out;
+}
+
+footer img:hover {
+    transform: scale(1.1);
+    opacity: 0.7;
+}
+
+
+
+
+
+/*          TOGGLE SWITCH       */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.xo-label {
+    position: relative;
+    top: 6px;
+    left: 10px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 8px;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 4px;
+    bottom: 4px;
+    -webkit-transition: .4s;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1px;
+    transition: .4s;
+    content: url(images/close_FILL0_wght400_GRAD0_opsz24.png);
+
+}
+
+input:checked + .slider {
+    background-color: rgba(150, 150, 150);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px rgba(150, 150, 150);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    content: url(images/radio_button_unchecked_FILL0_wght400_GRAD0_opsz24.png);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+

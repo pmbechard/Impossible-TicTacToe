@@ -10,12 +10,15 @@
 </head>
 <body>
     <header>
-        <h1>Impossible Tic-Tac-Toe</h1>
+        <h1>impossible tic-tac-toe</h1>
     </header>
 
     <div class="game-area">
         <div class="options-menu">
-            <button id="xo-switch">X O</button>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
             <select name="difficulty" id="difficulty">
                 <option value="easy">easy</option>
                 <option value="medium">medium</option>
@@ -25,7 +28,15 @@
         </div>
 
         <div class="game-grid">
-
+            <div class="div" id="box-1"></div>
+            <div class="div" id="box-2"></div>
+            <div class="div" id="box-3"></div>
+            <div class="div" id="box-4"></div>
+            <div class="div" id="box-5"></div>
+            <div class="div" id="box-6"></div>
+            <div class="div" id="box-7"></div>
+            <div class="div" id="box-8"></div>
+            <div class="div" id="box-9"></div>
         </div>
 
         <div class="reset-buttons">
@@ -36,7 +47,7 @@
 
     <footer>
         <small>Peyton Bechard &copy; 2022</small>
-        <img src="images/github.svg" alt="GitHub link">
+        <a href="https://github.com/pmbechard/Impossible-TicTacToe" target="_blank"><img src="images/GitHub-Mark-32px.png" alt="GitHub link"></a>
     </footer>
 </body>
 </html>
