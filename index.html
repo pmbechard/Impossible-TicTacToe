@@ -9,6 +9,34 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <header>
+        <h1>Impossible Tic-Tac-Toe</h1>
+    </header>
+
+    <div class="game-area">
+        <div class="options-menu">
+            <button id="xo-switch">X O</button>
+            <select name="difficulty" id="difficulty">
+                <option value="easy">easy</option>
+                <option value="medium">medium</option>
+                <option value="hard">hard</option>
+                <option value="impossible" selected>impossible</option>
+            </select>
+        </div>
+
+        <div class="game-grid">
+
+        </div>
+
+        <div class="reset-buttons">
+            <button id="restart">restart</button>
+            <button id="play-again">play again</button>
+        </div>
+    </div>
+
+    <footer>
+        <small>Peyton Bechard &copy; 2022</small>
+        <img src="images/github.svg" alt="GitHub link">
+    </footer>
 </body>
 </html>
