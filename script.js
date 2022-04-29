@@ -37,7 +37,10 @@ AI - manages bot player moves
 
 const GameGrid = (() => {
     let gameBoard = ['','','','','','','','',''];
+    const getGameBoard = () => gameBoard;
+
     let markerCount = 0;
+    const getMarkerCount = () => markerCount;
 
     const addMarker = (marker, value) => {
         gameBoard[value] = marker;
@@ -52,34 +55,7 @@ const GameGrid = (() => {
             const slot = document.getElementById(`box-${i}`);
             slot.textContent = gameBoard[i];
         }
-        checkResult();
-    };
-
-    const checkResult = () => {
-        if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
-            showResult(0, 1, 2);
-        } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
-            showResult(3, 4, 5);
-        } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
-            showResult(6, 7, 8);
-        } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
-            showResult(0, 3, 6);
-        } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
-            showResult(1, 4, 7);
-        } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
-            showResult(2, 5, 8);
-        } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
-            showResult(0, 4, 8);
-        } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
-            showResult(2, 4, 6);
-        } else if (gameBoard.every( value => (value) !== '')) {
-            console.log('draw');
-        }
-    };
-
-    const showResult = (a, b, c) => {
-            console.log(`${gameBoard[a]} wins`);
-    };
+    };    
 
     const reset = () => {
         const gameGrid = document.querySelectorAll('.game-grid div');
@@ -89,7 +65,7 @@ const GameGrid = (() => {
         updateDisplay();
     }
 
-    return { addMarker, reset };
+    return { addMarker, getGameBoard, getMarkerCount, reset };
 })();
 
 const GameOptions = (() => {
@@ -129,7 +105,34 @@ const AI = (() => {
 })();
 
 const GameFlow = (() => {
+    const gameBoard = GameGrid.getGameBoard();
+    const getMarkerCount = GameGrid.getMarkerCount();
 
+    const checkResult = () => {
+        if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
+            showResult(0, 1, 2);
+        } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
+            showResult(3, 4, 5);
+        } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
+            showResult(6, 7, 8);
+        } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
+            showResult(0, 3, 6);
+        } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
+            showResult(1, 4, 7);
+        } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
+            showResult(2, 5, 8);
+        } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
+            showResult(0, 4, 8);
+        } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
+            showResult(2, 4, 6);
+        } else if (markerCount === 9) {
+            console.log('draw');
+        }
+    };
+
+    const showResult = (a, b, c) => {
+            console.log(`${gameBoard[a]} wins`);
+    };
 })();
 
 
