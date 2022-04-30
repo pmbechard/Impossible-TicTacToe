@@ -174,58 +174,56 @@ const GameFlow = (() => {
         markerCount++;
         if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
             showResult(0, 1, 2);
-            gameOn = false;
         } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
             showResult(3, 4, 5);
-            gameOn = false;
         } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
             showResult(6, 7, 8);
             gameOn = false;
         } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
             showResult(0, 3, 6);
-            gameOn = false;
         } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
             showResult(1, 4, 7);
-            gameOn = false;
         } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
             showResult(2, 5, 8);
-            gameOn = false;
         } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
             showResult(0, 4, 8);
-            gameOn = false;
         } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
             showResult(2, 4, 6);
-            gameOn = false;
         } else if (markerCount === 9) {
             showResult(NaN);
-            console.log('draw');
-            gameOn = false;
         } 
         playerTurn = !playerTurn;
     };
 
     const showResult = (a, b, c) => {
-            if (a !== NaN) {
-                console.log(`${gameBoard[a]} wins`);
-            } else {
-                console.log('draw!')
-            }
+            gameOn = false;
+
+            console.log(`${gameBoard[a]} wins`);
 
             const gameGrid = document.querySelectorAll('.game-grid div');
             gameGrid.forEach( (slot) => {
+                console.log(slot.id)
                 slot.removeEventListener('click', ({}) );
+                if ([`box-${a}`, `box-${b}`, `box-${c}`].includes(slot.id)) {
+                    if (GameOptions.getPlayerMarker() === gameBoard[a]) {
+                        slot.style.backgroundColor = 'green';
+                    } else {
+                        slot.style.backgroundColor = 'red';
+                    }
+                }
             });
     };
 
     const restartButton = document.getElementById('restart');
     restartButton.addEventListener('click', () => {
         gameOn = true;
+        markerCount = 0;
         GameGrid.reset();
         if (!playerTurn) {
             AI.makeMove()
         }
         Player.makeMove();
-        markerCount = 0;
+
     });
 
     return { isPlayerTurn, checkResult, isGameOn };
