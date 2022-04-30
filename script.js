@@ -38,7 +38,7 @@ AI - manages bot player moves
 TO DO:
     - Add algorithm for AI
         - Use difficulty levels to interpret frequency of AI logic use
-    - Add result messages, highlight winning choices, and restart button pulse
+    - Add result messages
     - Improve styling
 
 
@@ -76,7 +76,10 @@ const GameGrid = (() => {
 
     const reset = () => {
         const gameGrid = document.querySelectorAll('.game-grid div');
-        gameGrid.forEach( (slot) => slot.classList.remove('disabled') );
+        gameGrid.forEach( (slot) => {
+            slot.classList.remove('disabled');
+            slot.style.backgroundColor = '';
+        });
         gameBoard.fill('');
         markerCount = 0;
         updateDisplay();
@@ -202,7 +205,6 @@ const GameFlow = (() => {
 
             const gameGrid = document.querySelectorAll('.game-grid div');
             gameGrid.forEach( (slot) => {
-                console.log(slot.id)
                 slot.removeEventListener('click', ({}) );
                 if ([`box-${a}`, `box-${b}`, `box-${c}`].includes(slot.id)) {
                     if (GameOptions.getPlayerMarker() === gameBoard[a]) {
@@ -212,18 +214,22 @@ const GameFlow = (() => {
                     }
                 }
             });
+            
+            const restartButton = document.getElementById('restart');
+            restartButton.classList.add('pulse');
     };
 
     const restartButton = document.getElementById('restart');
     restartButton.addEventListener('click', () => {
         gameOn = true;
         markerCount = 0;
+        const restartButton = document.getElementById('restart');
+        restartButton.classList.remove('pulse');
         GameGrid.reset();
         if (!playerTurn) {
             AI.makeMove()
         }
         Player.makeMove();
-
     });
 
     return { isPlayerTurn, checkResult, isGameOn };
