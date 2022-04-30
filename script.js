@@ -35,6 +35,13 @@ Player - manages player functionalities
 AI - manages bot player moves
 
 
+TO DO:
+    - Add algorithm for AI
+        - Use difficulty levels to interpret frequency of AI logic use
+    - Add result messages, highlight winning choices, and restart button pulse
+    - Improve styling
+
+
 KNOWN BUGS
     - 
 */
@@ -154,15 +161,6 @@ const AI = (() => {
 })();
 
 const GameFlow = (() => {
-    // rungame
-    // player move
-    // check result
-    // bot move
-    // check result
-    // ...
-    // if result, game finished
-    // restart with non-winner first else keep same starter
-
     const gameBoard = GameGrid.getGameBoard();
     let markerCount = GameGrid.getMarkerCount();
     let playerTurn = true;
@@ -207,10 +205,6 @@ const GameFlow = (() => {
     };
 
     const showResult = (a, b, c) => {
-            // highlight winning choices
-            // disable all slots
-            // show result message
-            // pulse restart button
             if (a !== NaN) {
                 console.log(`${gameBoard[a]} wins`);
             } else {
@@ -227,7 +221,9 @@ const GameFlow = (() => {
     restartButton.addEventListener('click', () => {
         gameOn = true;
         GameGrid.reset();
-        playerTurn = true;
+        if (!playerTurn) {
+            AI.makeMove()
+        }
         Player.makeMove();
         markerCount = 0;
     });
