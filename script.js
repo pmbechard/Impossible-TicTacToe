@@ -33,6 +33,11 @@ GameOptions - manages settings
 GameGrid - tracks marker positions
 Player - manages player functionalities
 AI - manages bot player moves
+
+
+KNOWN BUGS
+    - Infinite loop at draw
+    - Player can replace bot markers
 */
 
 const GameGrid = (() => {
@@ -107,8 +112,10 @@ const Player = (() => {
     let choice = null;
     gameGrid.forEach( (slot) => {
         slot.addEventListener('click', () => {
-            choice = slot.getAttribute('value');
-            makeMove();
+            if (GameFlow.isGameOn()) {
+                choice = slot.getAttribute('value');
+                makeMove();
+            }
         });
     });
 
@@ -122,6 +129,7 @@ const Player = (() => {
             if (GameFlow.isGameOn()) {
                 AI.makeMove();
             }
+            choice = null;
         }
     };
 
@@ -155,7 +163,7 @@ const GameFlow = (() => {
     // restart with non-winner first else keep same starter
 
     const gameBoard = GameGrid.getGameBoard();
-    const markerCount = GameGrid.getMarkerCount();
+    let markerCount = GameGrid.getMarkerCount();
     let playerTurn = true;
     let gameOn = true;
 
@@ -164,6 +172,7 @@ const GameFlow = (() => {
 
 
     const checkResult = () => {
+        markerCount++;
         if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
             showResult(0, 1, 2);
             gameOn = false;
@@ -189,6 +198,7 @@ const GameFlow = (() => {
             showResult(2, 4, 6);
             gameOn = false;
         } else if (markerCount === 9) {
+            showResult(NaN);
             console.log('draw');
             gameOn = false;
         } 
@@ -200,7 +210,16 @@ const GameFlow = (() => {
             // disable all slots
             // show result message
             // pulse restart button
-            console.log(`${gameBoard[a]} wins`);
+            if (a !== NaN) {
+                console.log(`${gameBoard[a]} wins`);
+            } else {
+                console.log('draw!')
+            }
+
+            const gameGrid = document.querySelectorAll('.game-grid div');
+            gameGrid.forEach( (slot) => {
+                slot.removeEventListener('click', ({}) );
+            });
     };
 
     const restartButton = document.getElementById('restart');
@@ -209,6 +228,7 @@ const GameFlow = (() => {
         GameGrid.reset();
         playerTurn = true;
         Player.makeMove();
+        markerCount = 0;
     });
 
     return { isPlayerTurn, checkResult, isGameOn };
