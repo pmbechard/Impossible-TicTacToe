@@ -95,7 +95,7 @@ const GameOptions = (() => {
     const getDifficultySetting = () => difficulty.value;
 
     const swapMarkersButton = document.querySelector('.switch');
-    swapMarkersButton.addEventListener('click', () => swapMarkers());
+    swapMarkersButton.addEventListener('mouseup', () => swapMarkers());
 
     const difficulty = document.querySelector('#difficulty');
 
@@ -152,6 +152,7 @@ const GameFlow = (() => {
     // check result
     // ...
     // if result, game finished
+    // restart with non-winner first else keep same starter
 
     const gameBoard = GameGrid.getGameBoard();
     const markerCount = GameGrid.getMarkerCount();
@@ -206,8 +207,8 @@ const GameFlow = (() => {
     restartButton.addEventListener('click', () => {
         gameOn = true;
         GameGrid.reset();
-        Player.makeMove();
         playerTurn = true;
+        Player.makeMove();
     });
 
     return { isPlayerTurn, checkResult, isGameOn };
