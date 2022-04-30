@@ -36,8 +36,7 @@ AI - manages bot player moves
 
 
 KNOWN BUGS
-    - Infinite loop at draw
-    - Player can replace bot markers
+    - 
 */
 
 const GameGrid = (() => {
@@ -114,7 +113,9 @@ const Player = (() => {
         slot.addEventListener('click', () => {
             if (GameFlow.isGameOn()) {
                 choice = slot.getAttribute('value');
-                makeMove();
+                if (slot.textContent === '') {
+                    makeMove();
+                }
             }
         });
     });
