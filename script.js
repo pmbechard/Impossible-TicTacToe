@@ -3,7 +3,7 @@ Impossible Tic-Tac-Toe
 by Peyton Bechard
 
 Created: 29 Apr 2022
-Last Updated: 29 Apr 2022
+Last Updated: 30 Apr 2022
 */
 
 /*
@@ -99,9 +99,6 @@ const GameOptions = (() => {
 
     const difficulty = document.querySelector('#difficulty');
 
-    const restartButton = document.getElementById('restart');
-    restartButton.addEventListener('click', () => GameGrid.reset());
-
     return { getPlayerMarker, getAIMarker, getDifficultySetting };
 })();
 
@@ -128,7 +125,7 @@ const Player = (() => {
         }
     };
 
-    return { getUserChoice };
+    return { makeMove };
 })();
 
 const AI = (() => {
@@ -204,6 +201,14 @@ const GameFlow = (() => {
             // pulse restart button
             console.log(`${gameBoard[a]} wins`);
     };
+
+    const restartButton = document.getElementById('restart');
+    restartButton.addEventListener('click', () => {
+        gameOn = true;
+        GameGrid.reset();
+        Player.makeMove();
+        playerTurn = true;
+    });
 
     return { isPlayerTurn, checkResult, isGameOn };
 })();
