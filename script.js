@@ -236,7 +236,7 @@ const AI = (() => {
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = GameOptions.getAIMarker();
-                    // Problem in recursive calculation?
+                    // Problem in recursive calcgulation?
                     best += Math.max(best, minimax(board, depth + 1, false));
                     board[i] = '';
                 }
