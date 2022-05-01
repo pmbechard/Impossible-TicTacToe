@@ -39,11 +39,13 @@ TO DO:
     - Add algorithm for AI
         - Use difficulty levels to interpret frequency of AI logic use
     - Add media queries for responsive design
+    - ability to switch markers mid-game would be cool
+
 
 
 
 KNOWN BUGS
-    - turns reset to Player first when markers switch - ability to switch mid-game would be great
+    -
 */
 
 const GameGrid = (() => {
@@ -102,6 +104,11 @@ const GameOptions = (() => {
         } else {
             playerMarker = 'X';
             AIMarker = 'O';
+        }
+        gameBoard = GameGrid.getGameBoard();
+        const playerFirst = gameBoard.filter( (slot) => slot !== '').length % 2 === 0;
+        if (playerFirst === false) {
+            GameFlow.checkResult();
         }
         const restartButton = document.getElementById('restart');
         restartButton.click();
@@ -182,7 +189,6 @@ const GameFlow = (() => {
             showResult(3, 4, 5);
         } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
             showResult(6, 7, 8);
-            gameOn = false;
         } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
             showResult(0, 3, 6);
         } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
@@ -227,13 +233,8 @@ const GameFlow = (() => {
 
     const restartButton = document.getElementById('restart');
     restartButton.addEventListener('click', () => {
-        const root = document.querySelector(':root');
-        root.style.setProperty('--winner', 'hidden');
-        root.style.setProperty('--draw', 'hidden');
-        root.style.setProperty('--loser', 'hidden');
         gameOn = true;
         markerCount = 0;
-        const restartButton = document.getElementById('restart');
         restartButton.classList.remove('pulse');
         GameGrid.reset();
         if (!playerTurn) {
