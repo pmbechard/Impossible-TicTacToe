@@ -57,6 +57,9 @@ header {
 .game-grid div {
     border: 1px solid black;
     cursor: pointer;
+    text-align: center;
+    padding-top: calc(50% - 40px);
+    font-size: 64px;
 }
 
 .game-grid div:hover {

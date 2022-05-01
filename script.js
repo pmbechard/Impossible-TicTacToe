@@ -3,7 +3,7 @@ Impossible Tic-Tac-Toe
 by Peyton Bechard
 
 Created: 29 Apr 2022
-Last Updated: 30 Apr 2022
+Last Updated: 1 May 2022
 */
 
 /*
@@ -38,12 +38,11 @@ AI - manages bot player moves
 TO DO:
     - Add algorithm for AI
         - Use difficulty levels to interpret frequency of AI logic use
-    - Add result messages
     - Improve styling
 
 
 KNOWN BUGS
-    - 
+    - turns reset to Player first when markers switch - ability to switch mid-game would be great
 */
 
 const GameGrid = (() => {
