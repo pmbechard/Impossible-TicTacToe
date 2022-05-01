@@ -1,4 +1,10 @@
 /*              UNIVERSAL       */
+:root {
+    --winner: hidden;
+    --loser: hidden;
+    --draw: hidden;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -219,3 +225,27 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+/* Result Messages */
+
+#winner, #draw, #loser {
+    position: absolute;
+    transform: rotate(-10deg);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 10vw;
+}
+
+#winner {
+    color: green;
+    visibility: var(--winner);
+}
+
+#draw {
+    color: blue;
+    visibility: var(--draw);
+}
+
+#loser {
+    color: red;
+    visibility: var(--loser);
+}

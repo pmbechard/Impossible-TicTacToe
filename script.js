@@ -193,7 +193,7 @@ const GameFlow = (() => {
         } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
             showResult(2, 4, 6);
         } else if (markerCount === 9) {
-            showResult(NaN);
+            showResult(-1);
         } 
         playerTurn = !playerTurn;
     };
@@ -202,6 +202,10 @@ const GameFlow = (() => {
             gameOn = false;
 
             console.log(`${gameBoard[a]} wins`);
+            if (a < 0) {
+                const root = document.querySelector(':root');
+                root.style.setProperty('--draw', 'visible');
+            }
 
             const gameGrid = document.querySelectorAll('.game-grid div');
             gameGrid.forEach( (slot) => {
@@ -209,10 +213,14 @@ const GameFlow = (() => {
                 if ([`box-${a}`, `box-${b}`, `box-${c}`].includes(slot.id)) {
                     if (GameOptions.getPlayerMarker() === gameBoard[a]) {
                         slot.style.backgroundColor = 'green';
+                        const root = document.querySelector(':root');
+                        root.style.setProperty('--winner', 'visible');
                     } else {
                         slot.style.backgroundColor = 'red';
+                        const root = document.querySelector(':root');
+                        root.style.setProperty('--loser', 'visible');
                     }
-                }
+                } 
             });
             
             const restartButton = document.getElementById('restart');
@@ -221,6 +229,10 @@ const GameFlow = (() => {
 
     const restartButton = document.getElementById('restart');
     restartButton.addEventListener('click', () => {
+        const root = document.querySelector(':root');
+        root.style.setProperty('--winner', 'hidden');
+        root.style.setProperty('--draw', 'hidden');
+        root.style.setProperty('--loser', 'hidden');
         gameOn = true;
         markerCount = 0;
         const restartButton = document.getElementById('restart');
