@@ -103,7 +103,8 @@ const GameOptions = (() => {
             playerMarker = 'X';
             AIMarker = 'O';
         }
-        GameGrid.reset();
+        const restartButton = document.getElementById('restart');
+        restartButton.click();
     };
 
     const getDifficultySetting = () => difficulty.value;
