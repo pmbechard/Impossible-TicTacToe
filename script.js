@@ -160,14 +160,47 @@ const AI = (() => {
 
     const makeMove = () => {
         if (!GameFlow.isPlayerTurn()) {
-            let random = parseInt(Math.random() * 9);
-            while (gameBoard[random] !== '') {
-                random = parseInt(Math.random() * 9);
+
+            // Decision to use Random or Logical Choice
+            const difficulty = GameOptions.getDifficultySetting();
+            let decisionFactor = 0;
+            if (difficulty === 'easy') {
+                decisionFactor = 0;
+            } else if (difficulty === 'medium') {
+                decisionFactor = 33;
+            } else if (difficulty === 'hard') {
+                decisionFactor = 66;
+            } else if (difficulty === 'impossible') {
+                decisionFactor = 100;
             }
-            GameGrid.addMarker(random);
+            const decision = Math.random() * 101;
+            if (decision >= decisionFactor) {
+                randomChoice();
+            } else {
+                logicalChoice();
+            }
         }
+    };
+
+    const randomChoice = () => {
+        let random = parseInt(Math.random() * 9);
+        while (gameBoard[random] !== '') {
+            random = parseInt(Math.random() * 9);
+        }
+        GameGrid.addMarker(random);
         GameFlow.checkResult();
     };
+
+    const logicalChoice = () => {
+        /**** Replace with AI decision-maker ****/
+        let random = parseInt(Math.random() * 9);
+        while (gameBoard[random] !== '') {
+            random = parseInt(Math.random() * 9);
+        }
+        GameGrid.addMarker(random);
+        GameFlow.checkResult();
+    };
+
     return { makeMove };
 })();
 
