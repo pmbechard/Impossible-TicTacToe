@@ -38,7 +38,8 @@ AI - manages bot player moves
 TO DO:
     - Add algorithm for AI
         - Use difficulty levels to interpret frequency of AI logic use
-    - Improve styling
+    - Add media queries for responsive design
+
 
 
 KNOWN BUGS
@@ -200,25 +201,22 @@ const GameFlow = (() => {
 
     const showResult = (a, b, c) => {
             gameOn = false;
+            const gameGrid = document.querySelectorAll('.game-grid div');
 
-            console.log(`${gameBoard[a]} wins`);
             if (a < 0) {
-                const root = document.querySelector(':root');
-                root.style.setProperty('--draw', 'visible');
+                gameGrid.forEach( (slot) => {
+                    slot.removeEventListener('click', ({}) );
+                    slot.style.backgroundColor = 'rgba(247, 235, 7, 0.5)';
+                    });
             }
 
-            const gameGrid = document.querySelectorAll('.game-grid div');
             gameGrid.forEach( (slot) => {
                 slot.removeEventListener('click', ({}) );
                 if ([`box-${a}`, `box-${b}`, `box-${c}`].includes(slot.id)) {
                     if (GameOptions.getPlayerMarker() === gameBoard[a]) {
-                        slot.style.backgroundColor = 'green';
-                        const root = document.querySelector(':root');
-                        root.style.setProperty('--winner', 'visible');
+                        slot.style.backgroundColor = 'rgba(19, 114, 19, 0.5)';
                     } else {
-                        slot.style.backgroundColor = 'red';
-                        const root = document.querySelector(':root');
-                        root.style.setProperty('--loser', 'visible');
+                        slot.style.backgroundColor = 'rgba(185, 40, 40, 0.5)';
                     }
                 } 
             });
