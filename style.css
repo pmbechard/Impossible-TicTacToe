@@ -21,6 +21,17 @@ body {
     align-items: center;
 }
 
+@font-face {
+    font-family: "SquarePeg";
+    src: url(fonts/SquarePeg-Regular.ttf);
+}
+
+h1, select, small, button {font-family: "SquarePeg";}
+h1 {font-size: 56px;}
+button {font-size: 32px;}
+select {font-size: 24px;}
+small {font-size: 18px;}
+
 
 /*              HEADER          */
 header {
@@ -81,9 +92,10 @@ header {
 .game-area button,
 .game-area select {
     width: 45%;
-    padding: 10px 0;
+    /* padding: 10px 0; */
+    padding: 10px -10px;
     margin: 0 2.5%;
-    font-size: 16px;
+    /* font-size: 16px; */
 }
 
 .pulse {

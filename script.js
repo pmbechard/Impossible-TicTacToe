@@ -39,7 +39,7 @@ TO DO:
     - Add algorithm for AI
         - Use difficulty levels to interpret frequency of AI logic use
     - Add media queries for responsive design
-    - ability to switch markers mid-game would be cool
+    - Ability to switch markers mid-game would be cool
 
 
 
@@ -120,6 +120,10 @@ const GameOptions = (() => {
     swapMarkersButton.addEventListener('mouseup', () => swapMarkers());
 
     const difficulty = document.querySelector('#difficulty');
+    difficulty.addEventListener('mousedown', () => difficulty.style.fontSize = '16px');
+    difficulty.addEventListener('change', () => difficulty.style.fontSize = '24px');
+    difficulty.addEventListener('contextmenu', () => difficulty.style.fontSize = '24px');
+
 
     return { getPlayerMarker, getAIMarker, getDifficultySetting };
 })();
