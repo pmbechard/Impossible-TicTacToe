@@ -197,13 +197,122 @@ const AI = (() => {
 
     const logicalChoice = () => {
         /**** Replace with AI decision-maker ****/
-        let random = parseInt(Math.random() * 9);
-        while (gameBoard[random] !== '') {
-            random = parseInt(Math.random() * 9);
+        // let random = parseInt(Math.random() * 9);
+        // while (gameBoard[random] !== '') {
+        //     random = parseInt(Math.random() * 9);
+        // }
+        // GameGrid.addMarker(random);
+        // GameFlow.checkResult();
+
+
+        let bestVal = -1000;
+        let bestMove = NaN;
+        
+        const gameBoard = GameGrid.getGameBoard();
+        for (let i = 0; i < gameBoard.length; i++) {
+            if (gameBoard[i] === '') {
+                gameBoard[i] = GameOptions.getAIMarker();
+                let moveVal = minimax(gameBoard, 0, false);
+                gameBoard[i] = '';
+
+                if (moveVal > bestVal) {
+                    bestVal = moveVal;
+                    bestMove = i;
+                }
+            }
         }
-        GameGrid.addMarker(random);
+        GameGrid.addMarker(bestMove);
         GameFlow.checkResult();
     };
+
+    const minimax = (board, depth, isMax) => {
+        let score = evaluate(board);
+        if (score === 10) {return score;}
+        if (score === -10) {return score;}
+        if (isMovesLeft(board) === false) {return 0;}
+
+        if (isMax) {
+            let best = -1000;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = GameOptions.getAIMarker();
+                    // Problem in recursive calculation?
+                    best += Math.max(best, minimax(board, depth + 1, false));
+                    board[i] = '';
+                }
+            }
+            return best;
+        } else {
+            let best = 1000;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = GameOptions.getPlayerMarker();
+                    // Problem in recursive calculation?
+                    best += Math.min(best, minimax(board, depth + 1, true));
+                    board[i] = '';
+                }
+            }
+            return best;
+        }
+    };
+
+    const isMovesLeft = (board) => {
+        return board.filter( (slot) => slot.textContent !== '').length > 0;
+    };
+
+    const evaluate = () => {
+        if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
+            if (GameOptions.getAIMarker() === gameBoard[0]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
+            if (GameOptions.getAIMarker() === gameBoard[3]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
+            if (GameOptions.getAIMarker() === gameBoard[6]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
+            if (GameOptions.getAIMarker() === gameBoard[0]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
+            if (GameOptions.getAIMarker() === gameBoard[1]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
+            if (GameOptions.getAIMarker() === gameBoard[2]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
+            if (GameOptions.getAIMarker() === gameBoard[0]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
+            if (GameOptions.getAIMarker() === gameBoard[2]){
+                return 10;
+            } else {
+                return -10;
+            }
+        } else {
+            return 0;
+        } 
+    }
 
     return { makeMove };
 })();
