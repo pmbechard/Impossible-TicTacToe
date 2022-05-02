@@ -45,7 +45,7 @@ TO DO:
 
 
 KNOWN BUGS
-    -
+    - 
 */
 
 const GameGrid = (() => {
@@ -190,15 +190,6 @@ const AI = (() => {
     };
 
     const logicalChoice = () => {
-        /**** Replace with AI decision-maker ****/
-        // let random = parseInt(Math.random() * 9);
-        // while (gameBoard[random] !== '') {
-        //     random = parseInt(Math.random() * 9);
-        // }
-        // GameGrid.addMarker(random);
-        // GameFlow.checkResult();
-
-
         let bestVal = -1000;
         let bestMove = NaN;
         
@@ -206,7 +197,7 @@ const AI = (() => {
         for (let i = 0; i < gameBoard.length; i++) {
             if (gameBoard[i] === '') {
                 gameBoard[i] = GameOptions.getAIMarker();
-                let moveVal = minimax(gameBoard, 0, false);
+                let moveVal = minimax(gameBoard, 0, GameFlow.isPlayerTurn());
                 gameBoard[i] = '';
 
                 if (moveVal > bestVal) {
@@ -221,9 +212,9 @@ const AI = (() => {
 
     const minimax = (board, depth, isMax) => {
         let score = evaluate(board);
+        if (!isMovesLeft(board)) {return 0;}
         if (score === 10) {return score;}
         if (score === -10) {return score;}
-        if (isMovesLeft(board) === false) {return 0;}
 
         /* 
             Working offensively but not defensively
@@ -234,7 +225,6 @@ const AI = (() => {
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = GameOptions.getAIMarker();
-                    // Problem in recursive calculation?
                     best = Math.max(best, minimax(board, depth + 1, false)) - depth;
                     board[i] = '';
                 }
@@ -250,7 +240,11 @@ const AI = (() => {
                     board[i] = '';
                 }
             }
-            return best;
+            if (!GameFlow.isPlayerFirst()) {
+                return best;
+            } else {
+                return Math.abs(best);
+            }
         }
     };
 
@@ -258,51 +252,51 @@ const AI = (() => {
         return board.filter( (slot) => slot.textContent !== '').length > 0;
     };
 
-    const evaluate = () => {
-        if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2] && gameBoard[0]) {
-            if (GameOptions.getAIMarker() === gameBoard[0]){
+    const evaluate = (board) => {
+        if (board[0] === board[1] && board[0] === board[2] && board[0]) {
+            if (GameOptions.getAIMarker() === board[0]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5] && gameBoard[3]) {
-            if (GameOptions.getAIMarker() === gameBoard[3]){
+        } else if (board[3] === board[4] && board[3] === board[5] && board[3]) {
+            if (GameOptions.getAIMarker() === board[3]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8] && gameBoard[6]) {
-            if (GameOptions.getAIMarker() === gameBoard[6]){
+        } else if (board[6] === board[7] && board[6] === board[8] && board[6]) {
+            if (GameOptions.getAIMarker() === board[6]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6] && gameBoard[0]) {
-            if (GameOptions.getAIMarker() === gameBoard[0]){
+        } else if (board[0] === board[3] && board[0] === board[6] && board[0]) {
+            if (GameOptions.getAIMarker() === board[0]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7] && gameBoard[1]) {
-            if (GameOptions.getAIMarker() === gameBoard[1]){
+        } else if (board[1] === board[4] && board[1] === board[7] && board[1]) {
+            if (GameOptions.getAIMarker() === board[1]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8] && gameBoard[2]) {
-            if (GameOptions.getAIMarker() === gameBoard[2]){
+        } else if (board[2] === board[5] && board[2] === board[8] && board[2]) {
+            if (GameOptions.getAIMarker() === board[2]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8] && gameBoard[0]) {
-            if (GameOptions.getAIMarker() === gameBoard[0]){
+        } else if (board[0] === board[4] && board[0] === board[8] && board[0]) {
+            if (GameOptions.getAIMarker() === board[0]){
                 return 10;
             } else {
                 return -10;
             }
-        } else if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6] && gameBoard[2]) {
-            if (GameOptions.getAIMarker() === gameBoard[2]){
+        } else if (board[2] === board[4] && board[2] === board[6] && board[2]) {
+            if (GameOptions.getAIMarker() === board[2]){
                 return 10;
             } else {
                 return -10;
@@ -320,9 +314,11 @@ const GameFlow = (() => {
     let markerCount = GameGrid.getMarkerCount();
     let playerTurn = true;
     let gameOn = true;
+    let playerFirst = true;
 
     const isPlayerTurn = () => playerTurn;
     const isGameOn = () => gameOn;
+    const isPlayerFirst = () => playerFirst;
 
 
     const checkResult = () => {
@@ -380,6 +376,7 @@ const GameFlow = (() => {
         gameOn = true;
         markerCount = 0;
         restartButton.classList.remove('pulse');
+        playerFirst = !playerFirst;
         GameGrid.reset();
         if (!playerTurn) {
             AI.makeMove()
@@ -387,5 +384,5 @@ const GameFlow = (() => {
         Player.makeMove();
     });
 
-    return { isPlayerTurn, checkResult, isGameOn };
+    return { isPlayerTurn, isPlayerFirst, checkResult, isGameOn };
 })();

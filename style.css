@@ -1,9 +1,4 @@
 /*              UNIVERSAL       */
-:root {
-    --winner: hidden;
-    --loser: hidden;
-    --draw: hidden;
-}
 
 * {
     margin: 0;
