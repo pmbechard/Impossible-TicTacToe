@@ -198,7 +198,9 @@ const AI = (() => {
             if (gameBoard[i] === '') {
                 gameBoard[i] = GameOptions.getAIMarker();
                 let moveVal = minimax(gameBoard, 0, GameFlow.isPlayerTurn());
+                console.log(gameBoard, moveVal)
                 gameBoard[i] = '';
+
 
                 if (moveVal > bestVal) {
                     bestVal = moveVal;
@@ -211,17 +213,38 @@ const AI = (() => {
     };
 
     const minimax = (board, depth, isMax) => {
+        /*
+        function  minimax(node, depth, maximizingPlayer) is
+            if depth = 0 or node is a terminal node then
+                return the heuristic value of node
+            if maximizingPlayer then
+                value := −∞
+                for each child of node do
+                    value := max(value, minimax(child, depth − 1, FALSE))
+                return value
+            else (* minimizing player *)
+                value := +∞
+                for each child of node do
+                    value := min(value, minimax(child, depth − 1, TRUE))
+                return value
+        */
+
+
         let score = evaluate(board);
         if (!isMovesLeft(board)) {return 0;}
         if (score === 10) {return score;}
         if (score === -10) {return score;}
 
         /* 
-            Working offensively but not defensively
+            Working offensively but not defensively before 'proper' commit
+            Now is flawed with commented out if statement below
+
+            Working offensively but not defensively in current state
+
         */
 
         if (isMax) {
-            let best = -1000;
+            let best = -Infinity;
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = GameOptions.getAIMarker();
@@ -231,20 +254,20 @@ const AI = (() => {
             }
             return best;
         } else {
-            let best = 1000;
+            let best = Infinity;
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = GameOptions.getPlayerMarker();
-                    // Problem in recursive calculation?
                     best = Math.min(best, minimax(board, depth + 1, true)) - depth;
                     board[i] = '';
                 }
             }
-            if (!GameFlow.isPlayerFirst()) {
-                return best;
-            } else {
-                return Math.abs(best);
-            }
+            // if (!GameFlow.isPlayerFirst()) {
+            //     return best;
+            // } else {
+            //     return Math.abs(best);
+            // }
+            return best;
         }
     };
 
