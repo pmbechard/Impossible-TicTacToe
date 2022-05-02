@@ -231,6 +231,10 @@ const AI = (() => {
         if (score === -10) {return score;}
         if (isMovesLeft(board) === false) {return 0;}
 
+        /* 
+            Working offensively but not defensively
+        */
+
         if (isMax) {
             let best = -1000;
             for (let i = 0; i < board.length; i++) {

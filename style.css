@@ -105,6 +105,11 @@ header {
     border: 1px solid black;
 }
 
+.pulse:hover {
+    background-color: rgba(87, 85, 197, 0.7);
+    cursor: pointer;
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
