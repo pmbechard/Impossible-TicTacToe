@@ -157,8 +157,8 @@ const AI = (() => {
     const gameBoard = GameGrid.getGameBoard();
 
     const makeMove = () => {
+        console.log(GameFlow.isPlayerFirst())
         if (!GameFlow.isPlayerTurn()) {
-
             // Decision to use Random or Logical Choice
             const difficulty = GameOptions.getDifficultySetting();
             let decisionFactor = 0;
@@ -190,26 +190,44 @@ const AI = (() => {
     };
 
     const logicalChoice = () => {
-        let bestVal = -1000;
-        let bestMove = NaN;
-        
         const gameBoard = GameGrid.getGameBoard();
-        for (let i = 0; i < gameBoard.length; i++) {
-            if (gameBoard[i] === '') {
-                gameBoard[i] = GameOptions.getAIMarker();
-                let moveVal = minimax(gameBoard, 0, GameFlow.isPlayerTurn());
-                console.log(gameBoard, moveVal)
-                gameBoard[i] = '';
 
+        if (gameBoard.filter( (item) => item !== '').length === 1) {
+            if (gameBoard[4] === '') {
+                GameGrid.addMarker(4);
+                GameFlow.checkResult();
+            } else {
+                GameGrid.addMarker(0);
+                GameFlow.checkResult();
+            }
+        } else {
+            let bestVal = -1000;
+            let bestMove = NaN;
+            
+            for (let i = 0; i < gameBoard.length; i++) {
+                if (gameBoard[i] === '') {
+                    let moveVal;
+                    if (!GameFlow.isPlayerFirst()) {
+                        gameBoard[i] = GameOptions.getAIMarker();
+                        moveVal = minimax(gameBoard, 0, false);
+                    } else {
+                        gameBoard[i] = GameOptions.getPlayerMarker();
+                        moveVal = minimax(gameBoard, 0, true);
+                    }
 
-                if (moveVal > bestVal) {
-                    bestVal = moveVal;
-                    bestMove = i;
+                    gameBoard[i] = '';
+    
+                    if (moveVal > bestVal) {
+                        bestVal = moveVal;
+                        bestMove = i;
+                    }
                 }
             }
+            GameGrid.addMarker(bestMove);
+            GameFlow.checkResult();
         }
-        GameGrid.addMarker(bestMove);
-        GameFlow.checkResult();
+
+        
     };
 
     const minimax = (board, depth, isMax) => {
@@ -229,50 +247,53 @@ const AI = (() => {
                 return value
         */
 
-
+        if (isMovesLeft(board) === 0) {return 0;}
         let score = evaluate(board);
-        if (!isMovesLeft(board)) {return 0;}
-        if (score === 10) {return score;}
-        if (score === -10) {return score;}
-
-        /* 
-            Working offensively but not defensively before 'proper' commit
-            Now is flawed with commented out if statement below
-
-            Working offensively but not defensively in current state
-
-        */
+        if (score > 0) {
+            return score - depth;
+        } else if (score < 0) {
+            return score + depth;
+        }
 
         if (isMax) {
-            let best = -Infinity;
+            let value = -Infinity;
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
-                    board[i] = GameOptions.getAIMarker();
-                    best = Math.max(best, minimax(board, depth + 1, false)) - depth;
+                    if (!GameFlow.isPlayerFirst()) {
+                        board[i] = GameOptions.getAIMarker();
+                    } else {
+                        board[i] = GameOptions.getPlayerMarker();
+                    }
+                    value = Math.max(value, minimax(board, depth - 1, false) - depth);
                     board[i] = '';
                 }
             }
-            return best;
+            return value;
         } else {
-            let best = Infinity;
+            let value = Infinity;
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
-                    board[i] = GameOptions.getPlayerMarker();
-                    best = Math.min(best, minimax(board, depth + 1, true)) - depth;
+                    if (!GameFlow.isPlayerFirst()) {
+                        board[i] = GameOptions.getPlayerMarker();
+                    } else {
+                        board[i] = GameOptions.getAIMarker();
+                    }
+                    value = Math.min(value, minimax(board, depth - 1, true) + depth);
                     board[i] = '';
                 }
             }
-            // if (!GameFlow.isPlayerFirst()) {
-            //     return best;
-            // } else {
-            //     return Math.abs(best);
-            // }
-            return best;
+            return value;
         }
     };
 
     const isMovesLeft = (board) => {
-        return board.filter( (slot) => slot.textContent !== '').length > 0;
+        let counter = 0;
+        for (let item in board) {
+            if (item !== '') {
+                counter += 1;
+            }
+        }
+        return counter;
     };
 
     const evaluate = (board) => {
@@ -399,10 +420,12 @@ const GameFlow = (() => {
         gameOn = true;
         markerCount = 0;
         restartButton.classList.remove('pulse');
-        playerFirst = !playerFirst;
         GameGrid.reset();
         if (!playerTurn) {
+            playerFirst = false;
             AI.makeMove()
+        } else {
+            playerFirst = true;
         }
         Player.makeMove();
     });
