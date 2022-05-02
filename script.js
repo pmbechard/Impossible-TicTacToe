@@ -119,12 +119,6 @@ const GameOptions = (() => {
     const swapMarkersButton = document.querySelector('.switch');
     swapMarkersButton.addEventListener('mouseup', () => swapMarkers());
 
-    const difficulty = document.querySelector('#difficulty');
-    difficulty.addEventListener('mousedown', () => difficulty.style.fontSize = '16px');
-    difficulty.addEventListener('change', () => difficulty.style.fontSize = '24px');
-    difficulty.addEventListener('contextmenu', () => difficulty.style.fontSize = '24px');
-
-
     return { getPlayerMarker, getAIMarker, getDifficultySetting };
 })();
 
