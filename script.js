@@ -36,16 +36,18 @@ AI - manages bot player moves
 
 
 TO DO:
-    - Add algorithm for AI
-        - Use difficulty levels to interpret frequency of AI logic use
+    - Fix minimax algorithm
     - Add media queries for responsive design
-    - Ability to switch markers mid-game would be cool
-
-
 
 
 KNOWN BUGS
-    - 
+    - Player can still win with sequences:
+        0, 8, 6, 7
+        8, 0, 6, 7
+        6, 2, 8, 7
+        2, 6, 8, 5
+        2, 6, 8, 7
+
 */
 
 const GameGrid = (() => {
@@ -157,7 +159,6 @@ const AI = (() => {
     const gameBoard = GameGrid.getGameBoard();
 
     const makeMove = () => {
-        console.log(GameFlow.isPlayerFirst())
         if (!GameFlow.isPlayerTurn()) {
             // Decision to use Random or Logical Choice
             const difficulty = GameOptions.getDifficultySetting();
@@ -191,7 +192,9 @@ const AI = (() => {
 
     const logicalChoice = () => {
         const gameBoard = GameGrid.getGameBoard();
-
+        const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+        
+        // Band-aid for center starter if player goes first
         if (gameBoard.filter( (item) => item !== '').length === 1) {
             if (gameBoard[4] === '') {
                 GameGrid.addMarker(4);
@@ -200,6 +203,11 @@ const AI = (() => {
                 GameGrid.addMarker(0);
                 GameFlow.checkResult();
             }
+        
+        // Band-aid for player winning method sequence: 4, 8, 2, 6
+        } else if (equals(gameBoard,[GameOptions.getAIMarker(), '', '', '', GameOptions.getPlayerMarker(), '', '', '', GameOptions.getPlayerMarker()])) {
+            GameGrid.addMarker(5);
+            GameFlow.checkResult();
         } else {
             let bestVal = -1000;
             let bestMove = NaN;
@@ -231,22 +239,6 @@ const AI = (() => {
     };
 
     const minimax = (board, depth, isMax) => {
-        /*
-        function  minimax(node, depth, maximizingPlayer) is
-            if depth = 0 or node is a terminal node then
-                return the heuristic value of node
-            if maximizingPlayer then
-                value := −∞
-                for each child of node do
-                    value := max(value, minimax(child, depth − 1, FALSE))
-                return value
-            else (* minimizing player *)
-                value := +∞
-                for each child of node do
-                    value := min(value, minimax(child, depth − 1, TRUE))
-                return value
-        */
-
         if (isMovesLeft(board) === 0) {return 0;}
         let score = evaluate(board);
         if (score > 0) {
