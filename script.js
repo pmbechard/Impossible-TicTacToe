@@ -36,7 +36,7 @@ AI - manages bot player moves
 
 
 TO DO:
-    - Fix minimax algorithm
+    - Fix minimax algorithm and reinstate 'Impossible' difficulty level
     - Add media queries for responsive design
 
 
@@ -163,13 +163,23 @@ const AI = (() => {
             // Decision to use Random or Logical Choice
             const difficulty = GameOptions.getDifficultySetting();
             let decisionFactor = 0;
+            /* 
+                Reinstate the following code block when minimax algorithm is working as expected
+            */
+            // if (difficulty === 'easy') {
+            //     decisionFactor = 0;
+            // } else if (difficulty === 'medium') {
+            //     decisionFactor = 33;
+            // } else if (difficulty === 'hard') {
+            //     decisionFactor = 66;
+            // } else if (difficulty === 'impossible') {
+            //     decisionFactor = 100;
+            // }
             if (difficulty === 'easy') {
                 decisionFactor = 0;
             } else if (difficulty === 'medium') {
-                decisionFactor = 33;
+                decisionFactor = 50;
             } else if (difficulty === 'hard') {
-                decisionFactor = 66;
-            } else if (difficulty === 'impossible') {
                 decisionFactor = 100;
             }
             const decision = Math.random() * 101;
